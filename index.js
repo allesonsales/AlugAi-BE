@@ -15,7 +15,7 @@ const {
 } = require("./Models/associations");
 const authRoutes = require("./Routes/RoutesAuth");
 const pagamentosRoutes = require("./Routes/RoutesPagamentos");
-const port = 3000;
+const port = process.env.APP_PORT;
 
 app.use(cors({ origin: "http://localhost:4200", credentials: true }));
 app.use(express.json());
