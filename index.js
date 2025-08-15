@@ -1,9 +1,9 @@
+require("dotenv").config();
 const express = require("express");
 const app = express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const conn = require("./conn/db");
-require("dotenv").config();
 const imovelRoutes = require("./Routes/RoutesImovel");
 const {
   Usuario,
