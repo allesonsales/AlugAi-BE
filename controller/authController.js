@@ -120,7 +120,7 @@ module.exports = class AuthController {
     });
 
     return res.status(201).json({
-      message: `Bem vindo, ${user.nome}`,
+      message: `Bem vindo, ${user.nome.split(" ")[0]}`,
       user: {
         id: user.id,
         nome: user.nome,
