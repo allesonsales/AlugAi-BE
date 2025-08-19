@@ -347,13 +347,19 @@ module.exports = class ImovelController {
       cpf,
       email,
       valorAluguel,
+      instalacaoAgua,
+      instalacaoLuz,
       fimContrato,
       diaVencimento,
     } = req.body;
 
     try {
       await Unidade.update(
-        { valorAluguel: valorAluguel },
+        {
+          valorAluguel: valorAluguel,
+          instalacaoAgua: instalacaoAgua,
+          instalacaoLuz: instalacaoLuz,
+        },
         { where: { id: unidadeId } }
       );
 
