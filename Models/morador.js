@@ -40,7 +40,7 @@ const Moradores = db.define("Moradores", {
   },
   email: {
     type: DataTypes.STRING,
-    allowNull: false,
+    allowNull: true,
   },
   ativo: {
     type: DataTypes.BOOLEAN,

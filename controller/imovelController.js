@@ -87,6 +87,8 @@ module.exports = class ImovelController {
       numeroUnidade,
       valorAluguel,
       comodos,
+      instalacaoLuz,
+      instalacaoAgua,
       ocupada,
       diaVencimento,
       morador,
@@ -126,6 +128,8 @@ module.exports = class ImovelController {
         numeroUnidade: numeroUnidade,
         comodos: comodos,
         valorAluguel: valorAluguel,
+        instalacaoAgua: instalacaoAgua,
+        instalacaoLuz: instalacaoLuz,
         ocupada: ocupada,
       };
 
@@ -338,6 +342,21 @@ module.exports = class ImovelController {
             diaVencimento: diaVencimento,
           },
           { where: { id: moradorId } }
+        );
+
+        const hoje = new Date();
+
+        await Pagamentos.update(
+          {
+            valorAluguel: valorAluguel,
+          },
+          {
+            where: {
+              moradorId: moradorId,
+              status: "Pendente",
+              dataVencimento: { [Op.gte]: hoje },
+            },
+          }
         );
       }
 

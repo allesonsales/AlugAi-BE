@@ -18,6 +18,14 @@ const Unidade = db.define("Unidade", {
     type: DataTypes.INTEGER,
     allowNull: false,
   },
+  instalacaoAgua: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
+  instalacaoLuz: {
+    type: DataTypes.STRING,
+    allowNull: true,
+  },
   ocupada: {
     type: DataTypes.BOOLEAN,
     allowNull: false,
