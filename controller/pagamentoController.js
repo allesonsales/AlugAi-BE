@@ -27,12 +27,32 @@ module.exports = class PagamentoController {
   }
 
   static async getaAllPagamentos(req, res) {
+    const usuarioId = req.user.id;
+
     try {
       const pagamentos = await Pagamentos.findAll({
         include: [
-          { model: Morador, include: [{ model: Unidade, include: [Imovel] }] },
+          {
+            model: Morador,
+            required: true,
+            include: [
+              {
+                model: Unidade,
+                required: true,
+                include: [
+                  {
+                    model: Imovel,
+                    required: true,
+                    where: { usuarioId: usuarioId },
+                  },
+                ],
+              },
+            ],
+          },
         ],
       });
+
+      console.log(pagamentos);
 
       return res.json(pagamentos);
     } catch (error) {

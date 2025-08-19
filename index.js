@@ -26,7 +26,7 @@ app.use("/usuario", authRoutes);
 app.use("/pagamentos", pagamentosRoutes);
 
 try {
-  conn.sync({ alter: true }).then(() => {
+  conn.sync().then(() => {
     app.listen(port);
     console.log("Servidor rodando com sequelize");
   });

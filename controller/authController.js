@@ -6,7 +6,6 @@ const JWT_SECRET = process.env.JWT_SECRET;
 
 module.exports = class AuthController {
   static async cadastrarUsuario(req, res) {
-    console.log("Body recebido:", req.body);
     const {
       nome,
       dataNascimento,
@@ -133,7 +132,6 @@ module.exports = class AuthController {
 
   static async encontrarUsuario(req, res) {
     const email = req.body.email;
-    console.log("Body recebido:", req.body);
     try {
       const usuario = await Usuario.findOne({ where: { email: email } });
 

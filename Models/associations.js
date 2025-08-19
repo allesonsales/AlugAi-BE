@@ -5,6 +5,10 @@ const Morador = require("./morador");
 const Pagamentos = require("./pagamentos");
 const Config = require("./configs");
 
+Usuario.hasMany(Imovel, { foreignKey: "usuarioId", onDelete: "CASCADE" });
+
+Imovel.belongsTo(Usuario, { foreignKey: "usuarioId", onDelete: "CASCADE" });
+
 Imovel.hasMany(Unidade, { foreignKey: "imovelId" });
 // Unidade pertence a um Imovel
 Unidade.belongsTo(Imovel, {

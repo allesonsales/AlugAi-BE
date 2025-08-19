@@ -159,6 +159,32 @@ module.exports = class ImovelController {
 
         await unidadeCriada.update({ moradorId: moradorCriado.id });
 
+        let vencimentos = [];
+        const inicio = new Date(dataInicioContrato);
+        const fim = new Date(dataFimContrato);
+
+        while (inicio <= fim) {
+          const dataVencimento = new Date(
+            inicio.getFullYear(),
+            inicio.getMonth(),
+            diaVencimento
+          )
+            .toISOString()
+            .slice(0, 10);
+
+          vencimentos.push({
+            moradorId: moradorCriado.id,
+            dataVencimento,
+            dataPagamento: null,
+            valor: valorAluguel,
+            status: "Pendente",
+          });
+
+          inicio.setMonth(inicio.getMonth() + 1);
+        }
+
+        await Pagamentos.bulkCreate(vencimentos);
+
         return res.status(201).json({
           message: "Unidade cadastrada com sucesso!",
           titulo: "Sucesso:",
@@ -348,7 +374,7 @@ module.exports = class ImovelController {
 
         await Pagamentos.update(
           {
-            valorAluguel: valorAluguel,
+            valor: valorAluguel,
           },
           {
             where: {
