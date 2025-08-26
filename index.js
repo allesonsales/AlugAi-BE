@@ -17,7 +17,24 @@ const authRoutes = require("./Routes/RoutesAuth");
 const pagamentosRoutes = require("./Routes/RoutesPagamentos");
 const port = process.env.APP_PORT;
 
-app.use(cors({ origin: "https://allesonsales.github.io", credentials: true }));
+const allowedOrigins = [
+  "https://www.alugai.app.br/login",
+  "https://alugairailway-alugai.up.railway.app",
+  "https://allesonsales.github.io",
+];
+
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Não permitido por CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
