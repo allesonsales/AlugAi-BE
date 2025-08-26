@@ -4,6 +4,7 @@ const Morador = require("../Models/morador");
 const Unidade = require("../Models/unidade");
 const Pagamentos = require("../Models/pagamentos");
 const Contrato = require("../utils/gerenciarContrato");
+const { criptografar, descriptografar } = require("../utils/criptrografar");
 
 module.exports = class ImovelController {
   static async addImovel(req, res) {
@@ -72,9 +73,34 @@ module.exports = class ImovelController {
     try {
       const imoveis = await Imovel.findAll({
         where: { usuarioId: usuarioId },
-        include: { model: Unidade, include: Morador },
+        include: {
+          model: Unidade,
+          include: [
+            {
+              model: Morador,
+            },
+          ],
+        },
       });
-      return res.json(imoveis);
+
+      const imoveisDescriptografados = imoveis.map((imovel) => {
+        const unidades = imovel.Unidades.map((unidade) => {
+          if (unidade.Morador) {
+            unidade.Morador = {
+              ...unidade.Morador.dataValues,
+              rg: descriptografar(unidade.Morador.rg),
+              cpf: descriptografar(unidade.Morador.cpf),
+            };
+          }
+          return unidade;
+        });
+        return {
+          ...imovel.dataValues,
+          Unidades: unidades,
+        };
+      });
+
+      return res.json(imoveisDescriptografados);
     } catch (error) {
       console.error(error);
       return res.status(400).json({ message: "Erro ao buscar imóveis" });
@@ -144,8 +170,8 @@ module.exports = class ImovelController {
         const moradorData = {
           nome: morador,
           dataNascimento: dataNascimento,
-          rg: rg,
-          cpf: cpf,
+          rg: criptografar(rg),
+          cpf: criptografar(cpf),
           inicioContrato: dataInicioContrato,
           fimContrato: dataFimContrato,
           telefone: telefone,
@@ -214,13 +240,21 @@ module.exports = class ImovelController {
           include: [Morador],
         });
 
-        if (encontrarUnidades.length == 0) {
+        if (encontrarUnidades.length === 0) {
           return res
             .status(409)
             .json({ message: "Esse imóvel não possui unidades cadastradas!" });
         }
 
-        return res.status(200).json(encontrarUnidades);
+        const unidadesComDescriptografia = encontrarUnidades.map((unidade) => {
+          if (unidade.Morador) {
+            unidade.Morador.rg = descriptografar(unidade.Morador.rg);
+            unidade.Morador.cpf = descriptografar(unidade.Morador.cpf);
+          }
+          return unidade;
+        });
+
+        return res.status(200).json(unidadesComDescriptografia);
       } catch (error) {
         console.error("Erro ao buscar unidades:", error);
         return res
@@ -271,8 +305,8 @@ module.exports = class ImovelController {
       const morador = {
         nome: nome,
         dataNascimento: dataNascimento,
-        rg: rg,
-        cpf: cpf,
+        rg: criptografar(rg),
+        cpf: criptografar(cpf),
         inicioContrato: dataInicioContrato,
         fimContrato: dataFimContrato,
         telefone: telefone,
@@ -367,9 +401,9 @@ module.exports = class ImovelController {
         await Morador.update(
           {
             telefone: telefone,
-            rg: rg,
+            rg: criptografar(rg),
             email: email,
-            cpf: cpf,
+            cpf: criptografar(cpf),
             fimContrato: fimContrato,
             diaVencimento: diaVencimento,
           },
@@ -414,7 +448,12 @@ module.exports = class ImovelController {
           .json({ message: "Morador não encontrado!", titulo: "Erro:" });
       }
 
-      return res.status(200).json(encontrarMorador);
+      const moradorData = {
+        ...encontrarMorador.dataValues,
+        rg: descriptografar(encontrarMorador.rg),
+        cpf: descriptografar(encontrarMorador.cpf),
+      };
+      return res.status(200).json(moradorData);
     } catch (err) {
       console.error(err);
     }
@@ -432,7 +471,13 @@ module.exports = class ImovelController {
         return res.status(400).json({ message: "Morador não encontrado!" });
       }
 
-      return res.status(200).json(encontrarMorador);
+      const moradorData = {
+        ...encontrarMorador.dataValues,
+        rg: descriptografar(encontrarMorador.rg),
+        cpf: descriptografar(encontrarMorador.cpf),
+      };
+
+      return res.status(200).json(moradorData);
     } catch (err) {
       console.error.err;
       return res.status(500).json({ message: "Erro interno do servidor" });
@@ -441,8 +486,6 @@ module.exports = class ImovelController {
 
   static async deleteMorador(req, res) {
     const { moradorId, unidadeId } = req.body;
-
-    console.log("BODY:", req.body);
 
     try {
       await Morador.update({ ativo: false }, { where: { id: moradorId } });

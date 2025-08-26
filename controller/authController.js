@@ -1,6 +1,7 @@
 const Usuario = require("../Models/usuario");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const criptografar = require("../utils/criptrografar");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -41,9 +42,9 @@ module.exports = class AuthController {
     const usuario = {
       nome: nome,
       dataNascimento: dataNascimento,
-      rg: rg,
+      rg: criptografar(rg),
       cep: cep,
-      cpf: cpf,
+      cpf: criptografar(cpf),
       endereco: endereco,
       banco: banco,
       agencia: agencia,

@@ -9,6 +9,7 @@ const multer = require("multer");
 const cloudinary = require("cloudinary");
 const { where } = require("sequelize");
 const upload = multer({ dest: "../contratos/" });
+import { descriptografar } from "./criptrografar";
 require("dotenv").config();
 
 module.exports = class contratoController {
@@ -46,8 +47,8 @@ module.exports = class contratoController {
       }
 
       const moradorNome = morador.nome;
-      const moradorCpf = formatarCPF(morador.cpf);
-      const moradorRg = formatarRG(morador.rg);
+      const moradorCpf = descriptografar(formatarCPF(morador.cpf));
+      const moradorRg = descriptografar(formatarRG(morador.rg));
       const imovelEndereco = `${imovel.rua}, ${imovel.bairro} - ${imovel.cidade} - ${imovel.estado}`;
       const dataInicioContrato = new Date(
         morador.inicioContrato
