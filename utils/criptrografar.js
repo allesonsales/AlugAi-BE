@@ -1,7 +1,5 @@
 const crypto = require("crypto");
-import dotenv from "dotenv";
-
-dotenv.config();
+require("dotenv").config();
 
 const algorithm = "aes-256-cbc";
 const secret = process.env.RG_SECRET;
