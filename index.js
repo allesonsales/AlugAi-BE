@@ -18,7 +18,7 @@ const pagamentosRoutes = require("./Routes/RoutesPagamentos");
 const port = process.env.APP_PORT;
 
 const allowedOrigins = [
-  "https://www.alugai.app.br/login",
+  "https://www.alugai.app.br",
   "https://alugairailway-alugai.up.railway.app",
   "https://allesonsales.github.io",
 ];
