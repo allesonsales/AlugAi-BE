@@ -1,4 +1,4 @@
-import crypto from "crypto";
+const crypto = require("crypto");
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -24,4 +24,4 @@ function descriptografar(dado) {
   return decrypted;
 }
 
-export { criptografar, descriptografar };
+module.exports = { criptografar, descriptografar };
