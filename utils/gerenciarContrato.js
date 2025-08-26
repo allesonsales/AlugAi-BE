@@ -9,7 +9,7 @@ const multer = require("multer");
 const cloudinary = require("cloudinary");
 const { where } = require("sequelize");
 const upload = multer({ dest: "../contratos/" });
-import { descriptografar } from "./criptrografar";
+const descriptografar = require("./criptrografar");
 require("dotenv").config();
 
 module.exports = class contratoController {
