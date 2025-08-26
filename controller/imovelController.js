@@ -479,7 +479,7 @@ module.exports = class ImovelController {
 
       return res.status(200).json(moradorData);
     } catch (err) {
-      console.error.err;
+      console.error(err);
       return res.status(500).json({ message: "Erro interno do servidor" });
     }
   }

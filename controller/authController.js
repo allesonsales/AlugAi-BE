@@ -1,7 +1,7 @@
 const Usuario = require("../Models/usuario");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
-const criptografar = require("../utils/criptrografar");
+const { criptografar, descriptografar } = require("../utils/criptrografar");
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -202,7 +202,13 @@ module.exports = class AuthController {
 
     try {
       const usuarioEncontrado = await Usuario.findOne({ where: { id: id } });
-      return res.status(200).json(usuarioEncontrado);
+      const usuarioData = {
+        ...usuarioEncontrado.dataValues,
+        rg: descriptografar(usuarioEncontrado.rg),
+        cpf: descriptografar(usuarioEncontrado.cpf),
+      };
+
+      return res.status(200).json(usuarioData);
     } catch (err) {
       console.error(err);
     }
@@ -278,8 +284,8 @@ module.exports = class AuthController {
           nome: nome,
           telefone: telefone,
           endereco: endereco,
-          rg: rg,
-          cpf: cpf,
+          rg: criptografar(rg),
+          cpf: criptografar(cpf),
           cep: cep,
           banco: banco,
           agencia: agencia,
