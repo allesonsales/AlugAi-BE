@@ -2,7 +2,7 @@ const crypto = require("crypto");
 require("dotenv").config();
 
 const algorithm = "aes-256-cbc";
-const secret = process.env.RG_SECRET;
+const secret = process.env.RG_SENHA;
 const key = crypto.scryptSync(secret, "salt", 32);
 
 function criptografar(dado) {
