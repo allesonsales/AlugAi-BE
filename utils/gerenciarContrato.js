@@ -64,11 +64,11 @@ module.exports = class contratoController {
       const usuarioDataNascimento = new Date(
         usuario.dataNascimento
       ).toLocaleDateString("pt-BR");
-      const usuarioRg = formatarRG(usuario.rg);
-      const usuarioCpf = formatarCPF(usuario.cpf);
+      const usuarioRg = descriptografar(formatarRG(usuario.rg));
+      const usuarioCpf = descriptografar(formatarCPF(usuario.cpf));
       const usuarioEndereco = usuario.endereco;
-      const usuarioAgencia = usuario.agencia;
-      const usuarioConta = usuario.conta;
+      const usuarioAgencia = descriptografar(usuario.agencia);
+      const usuarioConta = descriptografar(usuario.conta);
       console.log("usuario id", usuarioId);
       const dados = {
         moradorNome,
