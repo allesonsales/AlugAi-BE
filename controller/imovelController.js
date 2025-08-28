@@ -5,6 +5,7 @@ const Unidade = require("../Models/unidade");
 const Pagamentos = require("../Models/pagamentos");
 const Contrato = require("../utils/gerenciarContrato");
 const { criptografar, descriptografar } = require("../utils/criptrografar");
+const Usuario = require("../Models/usuario");
 
 module.exports = class ImovelController {
   static async addImovel(req, res) {
@@ -525,5 +526,22 @@ module.exports = class ImovelController {
     }
 
     return res.status(200).json(encontrarUnidade);
+  }
+
+  static async deletarConta(req, res) {
+    const id = req.user.id;
+
+    try {
+      const deletado = await Usuario.destroy({ where: { id: id } });
+
+      if (deletado === 0) {
+        return res.status(404).json({ message: "Conta não encontrada." });
+      }
+
+      return res.status(200).json({ message: "Conta excluída com sucesso!" });
+    } catch (err) {
+      console.error("Erro ao excluir conta:", err);
+      return res.status(500).json({ message: `Erro ao excluir conta. ${err}` });
+    }
   }
 };
